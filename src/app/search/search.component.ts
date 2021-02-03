@@ -23,6 +23,7 @@ export class SearchComponent {
   headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
 
   siteMapLinks
+  metaTagLinks
   imageContent: any
   URL: any;
   data: any[];
@@ -86,6 +87,15 @@ export class SearchComponent {
   }
   fetchMetaData() {
     console.log("metadata links")
+    this.http.post<any>('http://localhost:3000/url', { url: this.URL, type: 'meta' }, { headers: this.headers }).subscribe(response => {
+
+      this.metaTagLinks = response
+      console.log('metadata received', this.metaTagLinks)
+    },
+      (error) => {                              //Error callback
+        console.error('error caught in component')
+      }
+    )
   }
   fetchVideo() {
     console.log("video links")

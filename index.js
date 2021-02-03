@@ -1,8 +1,10 @@
 
 const puppeteer = require('puppeteer');
+
 var express = require('express')
 var app = express()
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
+const { getMeta } = require('./meta');
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
 
@@ -12,6 +14,7 @@ const ignoreUrls = ['', 'javascript: void(0)', '#']
 var URL =""
 var urlList = new Set()
 var imageList
+var metaList
 
 
 app.use(function (req, res, next) {
@@ -40,6 +43,13 @@ if(type=='sitemap') {
 
 }
 
+if(type=='meta') {
+  console.log("meta info requested")
+  await fetchMetaTags()
+  return res.status(200).json( metaList )
+
+}
+
 
   if(url) {
     console.log('Got body:', req.body);
@@ -58,12 +68,22 @@ app.listen(3000, ()=> {
   console.log("server running on 3000")
 })
 
+async function fetchMetaTags() {
+  const browser = await puppeteer.launch({headless:true});
+  const page = await browser.newPage();
+  await page.goto(URL, {waitUntil: 'networkidle0'});
+  const pageTitle1 = await page.evaluate(() => document.querySelectorAll("head > meta[name='description']")[0].content);
+   
+  console.log(pageTitle1)
+  // metaList = grupos
+  await browser.close();
 
+  // console.log(links, "links")
+}
 async function fetchURLS() {
   const browser = await puppeteer.launch({headless:true});
   const page = await browser.newPage();
   console.log(URL, "weburl")
-  await page.goto(URL);
   let hrefs = await page.$$eval('a', as => as.map(a => 
     {
       return {
