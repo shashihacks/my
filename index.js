@@ -21,14 +21,26 @@ app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization");
   next();
   });
+
+
 app.get('/', function (req, res) {
   res.send('Hello World')
  
 })
+
 app.post('/url',(async (req, res)=> {
-  const { url } = req.body;
-console.log(url, "rec oved")
-URL = url
+  const { url, type } = req.body;
+  URL = url
+  console.log(type, "type")
+if(type=='sitemap') {
+  console.log("sitemap requested")
+  await fetchURLS()
+  console.log("after fetch urls", urlList)
+  return res.status(200).json( urlList )
+
+}
+
+
   if(url) {
     console.log('Got body:', req.body);
     await run()
@@ -47,20 +59,41 @@ app.listen(3000, ()=> {
 })
 
 
+async function fetchURLS() {
+  const browser = await puppeteer.launch({headless:true});
+  const page = await browser.newPage();
+  console.log(URL, "weburl")
+  await page.goto(URL);
+  let hrefs = await page.$$eval('a', as => as.map(a => 
+    {
+      return {
+        "hrefs" :  a.href, 
+        "label" : a.getAttribute('aria-label')
+      }
+
+    }));
+  // hrefs = hrefs.filter(href =>   ignoreUrls.includes(href) || !href.includes(URL)  ? '' : href )
+  urlList = [...new Set(hrefs)]
+  console.log(urlList, "links and labels")
+
+  await browser.close();
+
+}
+
 
 async function run(){
   const browser = await puppeteer.launch({headless:true});
   const page = await browser.newPage();
   await page.goto(URL);
-//   get Images
-  // console.log("getting Images")
-  // imageList = [...new Set(await page.evaluate(
-  //   () =>Array.from(document.querySelectorAll('img'),
-  //                  a => a.getAttribute('src'))))];
-  //   console.log(imageList, "list in run")
+  // get Images
+  console.log("getting Images")
+  imageList = [...new Set(await page.evaluate(
+    () =>Array.from(document.querySelectorAll('img'),
+                   a => a.getAttribute('src'))))];
+    console.log(imageList, "list in run")
 
 
-//Get URLS
+// Get URLS
     // let hrefs = await page.$$eval('a', as => as.map(a => a.href));
     // hrefs = hrefs.filter(href =>   ignoreUrls.includes(href) || !href.includes(URL)  ? '' : href )
     // urlList = new Set(hrefs)
@@ -79,7 +112,6 @@ async function run(){
     //     setTimeout(()=>{},200);
     // } 
     // console.log("Final list")
-    // console.log(urlList)
 
 //get Metadata
 

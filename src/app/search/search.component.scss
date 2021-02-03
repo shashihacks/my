@@ -1,50 +1,9 @@
-@import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
-body{
-  background: #f2f2f2;
-  font-family: 'Open Sans', sans-serif;
+.input-group {
+  justify-content: center
 }
-
-.search {
-  width: 100%;
-  position: relative;
-  display: flex;
-}
-
-.searchTerm {
-  width: 100%;
-  border: 3px solid #00B4CC;
-  border-right: none;
-  padding: 5px;
-  height: auto;
-  border-radius: 5px 0 0 5px;
-  outline: none;
-  color: #9DBFAF;
-}
-
-.searchTerm:focus{
-  color: #00B4CC;
-}
-
-.searchButton {
-  width: 40px;
-  height: auto;
-  border: 1px solid #00B4CC;
-  background: #00B4CC;
-  text-align: center;
-  color: #fff;
-  border-radius: 0 5px 5px 0;
-  cursor: pointer;
-  font-size: 20px;
-}
-
-/*Resize the wrap to see the search bar change!*/
-.wrap{
+.form-outline {
   width: 50%;
-  margin: 0 auto;  
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .chip {
@@ -68,4 +27,23 @@ body{
   width: 50%;
   margin: 1% auto;
 
+}
+.image-container {
+  display: flex;
+  flex-wrap:  wrap;
+  justify-content:space-between;
+
+  margin-bottom: 2%;
+}
+img {
+  height: 200px;
+  object-fit: cover;
+  margin-bottom: 2%;
+}
+
+
+.selected {
+  color: #fff;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
 }
