@@ -23,7 +23,7 @@ export class SearchComponent {
   headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
 
   siteMapLinks
-  images: any
+  imageContent: any
   URL: any;
   data: any[];
   selectedNode: any;
@@ -39,7 +39,7 @@ export class SearchComponent {
     this.URL = searchURL.value
     this.http.post<any>('http://localhost:3000/url', { url: searchURL.value, }, { headers: this.headers }).subscribe(response => {
       console.log('response received', response)
-      this.images = response
+      this.imageContent = response
 
     },
       (error) => {                              //Error callback

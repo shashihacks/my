@@ -2,7 +2,7 @@
     <div class="input-group">
         <div class="form-outline">
             <input placeholder="Enter any Website URL (Eg. https:www//imdb.com)" #searchURL type="search" id="form1"
-                class="form-control" />
+                value="https://www.bookmyshow.com" class="form-control" />
         </div>
         <button (click)="onSearch(searchURL)" type="button" class=" btn btn-primary">
             <svg style="vertical-align: baseline;" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -22,8 +22,15 @@
     </div>
 
 
-    <div class="image-container">
-        <div *ngFor="let image of images"> <img src="{{image}}" class="rounded float-left"> </div>
+    <div *ngFor="let image of imageContent">
+        <div class="card" style="max-width: 18rem; float: left;">
+            <img class="card-img-top rounded " src="{{image.source}}" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">{{image.label || 'No Label'}}</h5>
+                <a target="_blank" href="{{image.source}}" class="btn btn-primary m-2">Visit Image</a>
+                <a target="_blank" href="{{URL}}" class="btn btn-primary m-2">Visit Page</a>
+            </div>
+        </div>
     </div>
 
 

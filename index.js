@@ -89,7 +89,7 @@ async function run(){
   console.log("getting Images")
   imageList = [...new Set(await page.evaluate(
     () =>Array.from(document.querySelectorAll('img'),
-                   a => a.getAttribute('src'))))];
+                   a =>  { return {source: a.getAttribute('src'), label: a.getAttribute('alt')}  }   )))];
     console.log(imageList, "list in run")
 
 
