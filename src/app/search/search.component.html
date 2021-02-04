@@ -16,7 +16,7 @@
 
     <div class="selections">
         <span class="chip " *ngFor="let type of contentTypes" [class.selected]="content === type"
-            (click)="clicked = (content === type ? null :type)" (click)="onContentFetch(type)">
+            (click)="clicked = (content === type ? null :type)" (click)="onContentFetch(type , searchURL.value)">
             {{type}}
         </span>
     </div>
@@ -32,6 +32,30 @@
             </div>
         </div>
     </div>
+
+
+
+    <!-- Meta data  -->
+    <table *ngIf="metaTagLinks" class="table table-bordered table-striped table-responsive"
+        style="max-width: 60%; margin: 0 auto;">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Tag Type</th>
+                <th scope="col">Value</th>
+                <th scope="col">Content</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let tag of metaTagLinks; let i=index">
+                <th scope="row">{{i+1}}</th>
+                <td class="no-wrap">{{tag?.name!='' ? 'name' : 'Property'}}</td>
+                <td class="no-wrap">{{tag?.name }}</td>
+                <td class="word-wrap">{{tag?.content}}</td>
+            </tr>
+        </tbody>
+    </table>
 
 
 

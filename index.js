@@ -72,9 +72,48 @@ async function fetchMetaTags() {
   const browser = await puppeteer.launch({headless:true});
   const page = await browser.newPage();
   await page.goto(URL, {waitUntil: 'networkidle0'});
-  const pageTitle1 = await page.evaluate(() => document.querySelectorAll("head > meta[name='description']")[0].content);
-   
-  console.log(pageTitle1)
+   metaList = await page.evaluateHandle(() => {
+    return Array.from(document.getElementsByTagName('meta')).map(a => {
+      return { 
+        name:a.name ? a.name : '',
+        content:a.content,
+      }
+    } );
+  });
+  console.log(await metaList.jsonValue());  
+  metaList = await metaList.jsonValue()
+  // console.log(metaList)
+  // const robots = await page.evaluate(() => document.querySelectorAll("head > meta[name='robots']")[0].content);
+  // // const description = await page.evaluate(() => document.querySelectorAll("head > meta[itemprop='description']")[0].content);
+  // // const description = await page.evaluate(() => document.querySelectorAll("head > meta[itemprop='image']")[0].content);
+  // const pageType = await page.evaluate(() => document.querySelectorAll("head > meta[property='pageType']")[0].content);
+  // const subpageType = await page.evaluate(() => document.querySelectorAll("head > meta[property='subpageType']")[0].content);
+  // const ogType = await page.evaluate(() => document.querySelectorAll("head > meta[property='og:type']")[0].content);
+  // const ogDescription = await page.evaluate(() => document.querySelectorAll("head > meta[property='og:description']")[0].content);
+  // const ogSitename = await page.evaluate(() => document.querySelectorAll("head > meta[property='og:site_name']")[0].content);
+  // const ogImage = await page.evaluate(() => document.querySelectorAll("head > meta[property='og:image']")[0].content);
+  // const ogTitle = await page.evaluate(() => document.querySelectorAll("head > meta[property='og:title']")[0].content);
+
+// metaList = {
+//   description,
+//   robots,
+//   subpageType,
+//   pageType,
+//   ogType,
+//   ogDescription,
+//   ogSitename,
+//   ogImage,
+//   ogTitle
+
+// }
+
+
+//   console.table({
+//     description,
+//     robots,
+//     subpageType,
+//     pageType
+//   })
   // metaList = grupos
   await browser.close();
 

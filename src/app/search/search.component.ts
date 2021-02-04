@@ -50,7 +50,7 @@ export class SearchComponent {
   }
 
 
-  onContentFetch(contentType) {
+  onContentFetch(contentType, url) {
 
     this.content = contentType
     switch (contentType) {
@@ -64,7 +64,7 @@ export class SearchComponent {
         this.fetchVideo();
         break;
       case 'Metadata':
-        this.fetchMetaData();
+        this.fetchMetaData(url);
         break;
       case 'Sitemap':
         this.fetchSiteMap();
@@ -85,9 +85,9 @@ export class SearchComponent {
       }
     )
   }
-  fetchMetaData() {
-    console.log("metadata links")
-    this.http.post<any>('http://localhost:3000/url', { url: this.URL, type: 'meta' }, { headers: this.headers }).subscribe(response => {
+  fetchMetaData(url) {
+    console.log("metadata links", url)
+    this.http.post<any>('http://localhost:3000/url', { url: url, type: 'meta' }, { headers: this.headers }).subscribe(response => {
 
       this.metaTagLinks = response
       console.log('metadata received', this.metaTagLinks)

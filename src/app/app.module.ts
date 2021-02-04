@@ -5,6 +5,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SearchComponent } from './search/search.component';
 import { SitemapComponent } from './sitemap/sitemap.component';
+import { RouterModule, Routes } from '@angular/router';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -14,9 +17,11 @@ import { SitemapComponent } from './sitemap/sitemap.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: [RouterModule]
+
 })
 export class AppModule { }
