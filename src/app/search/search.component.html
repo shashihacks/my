@@ -36,6 +36,7 @@
 
 
     <!-- Meta data  -->
+
     <table *ngIf="metaTagLinks" class="table table-bordered table-striped table-responsive"
         style="max-width: 60%; margin: 0 auto;">
         <thead>
@@ -48,7 +49,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let tag of metaTagLinks; let i=index">
+            <tr *ngFor="let tag of metaTagLinks; let i=index" (click)="navigateToSource(searchURL.value)">
                 <th scope="row">{{i+1}}</th>
                 <td class="no-wrap">{{tag?.name!='' ? 'name' : 'Property'}}</td>
                 <td class="no-wrap">{{tag?.name }}</td>

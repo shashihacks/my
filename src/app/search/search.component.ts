@@ -2,6 +2,7 @@ import { AfterContentInit, Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 // import dataTreeSimple from '../../assets/data-tree-simple';
 import * as d3 from 'd3'
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -28,7 +29,7 @@ export class SearchComponent {
   URL: any;
   data: any[];
   selectedNode: any;
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
 
     // this.data = dataTreeSimple.result;
 
@@ -109,6 +110,12 @@ export class SearchComponent {
 
   // ngOnInit(): void {
   // }
+
+  navigateToSource(url) {
+    // console.log(url, URL)
+    // let navigateUrl = 'view-source:' + url
+    // javascript: void (window.open('view-source:' + url))
+  }
 
   nodeUpdated(node: any) {
     console.info("app detected node change");
