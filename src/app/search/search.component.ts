@@ -108,23 +108,8 @@ export class SearchComponent {
     console.log("image links")
   }
 
-  // ngOnInit(): void {
-  // }
 
-  navigateToSource(url) {
-    // console.log(url, URL)
-    // let navigateUrl = 'view-source:' + url
-    // javascript: void (window.open('view-source:' + url))
-  }
 
-  nodeUpdated(node: any) {
-    console.info("app detected node change");
-  }
-  nodeSelected(node: any) {
-    console.info("app detected node selected", node);
-    this.selectedNode = node;
-
-  }
 
 
 }
