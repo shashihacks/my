@@ -121,31 +121,35 @@ export class SearchComponent {
       console.log(response)
       this.siteMapLinks.children = response
       // this.refetchLinks();
+      let count = 0;
       for (let i = 0; i < this.siteMapLinks.children.length; i++) {
         if (this.siteMapLinks.children[i].tooltip != '') {
           let links2 = this.http.post<any>('http://localhost:3000/url', { url: this.siteMapLinks.children[i].tooltip, type: 'sitemap' }, { headers: this.headers }).toPromise()
           links2.then(response2 => {
-            console.log(response2, "received children")
+            console.log(response2, "received children", i)
+            count += 1
+            console.log(count, " no.count")
             this.siteMapLinks.children[i].children = response2
           })
+
         }
 
       }
       this.data = this.siteMapLinks
       console.log("tree data")
       console.log(this.treeMapService.data)
-      console.log("tree data")
+      console.log("site data")
       console.log(this.siteMapLinks)
-      setTimeout(() => {
-        this.renderTreeChart()
-
-      }, 20000)
+      let treeInterval = setInterval(() => {
+        console.log("waiting for render", count)
+        if (count >= 4) {
+          console.log("rendering")
+          this.renderTreeChart()
+          clearInterval(treeInterval)
+        }
+      }, 500)
 
     })
-
-    // this.treeMapService.data = this.siteMapLinks
-    // console.log(this.siteMapLinks)
-
   }
 
   fetchMetaData(url) {
@@ -421,12 +425,12 @@ export class SearchComponent {
       .append('xhtml').html(function (d) {
         return '<div class="node-text wordwrap" data-type="contextMenu">'
           + '<div class="divider" data-type="contextMenu"></div>'
+          + '<div data-type="contextMenu" class="menu-heading"><b data-type="contextMenu">Attributes</b></div>'
+          + '<div data-type="contextMenu" class="menu-content">URL: <span data-type="contextMenu">' + d.data?.value + '</span></div>'
+          + '<div data-type="contextMenu" class="menu-sub-content">Link Type:  <span data-type="contextMenu">' + d.data.contextMenu.subContent + '</span></div>'
           + '<div data-type="contextMenu" class="menu-heading"><b data-type="contextMenu">Heading</b></div>'
-          + '<div data-type="contextMenu" class="menu-content">Content <span data-type="contextMenu">--</span></div>'
-          + '<div data-type="contextMenu" class="menu-sub-content">Content <span data-type="contextMenu">' + d.data.contextMenu.subContent + '</span></div>'
-          + '<div data-type="contextMenu" class="menu-heading"><b data-type="contextMenu">Heading</b></div>'
-          + '<div data-type="contextMenu" class="menu-content">Content <span data-type="contextMenu">' + d.data.contextMenu.content + '</span></div>'
-          + '<div data-type="contextMenu" class="menu-sub-content">Content <span data-type="contextMenu">--</span></div>'
+          + '<div data-type="contextMenu" class="menu-content">className <span data-type="contextMenu">' + d.data.contextMenu.content + '</span></div>'
+          + '<div data-type="contextMenu" class="menu-sub-content">Info:  <span data-type="contextMenu">--</span></div>'
           + '</div>';
       })
 

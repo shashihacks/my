@@ -97,27 +97,21 @@ async function fetchURLS() {
 
   let hrefs = await page.$$eval('a', as => as.map(a => {
     return{
-      // link : a.href,
-      // class: a.classList,
-      // name: a.textContent,
-      // title:a.getAttribute('title'),
-      // type: a.getAttribute('type'),
-      // media: a.getAttribute('media'),
-      "name": a.textContent.trim() + Math.random(1),
+      "name":  (Math.floor(Math.random() * (1000 - 0+ 1)) + 0).toString() +". " + a.textContent.trim(),
       "tooltip": a.href,
       "contextMenu": {
         "title": a.textContent.trim(),
-        "content": a.href,
-        "subContent": ""
+        "content": a.getAttribute('id') || a.getAttribute('class') || 'No Identifier',
+        "subContent": a.getAttribute('type') || 'text/html'
       },
-      "value": 100,
+      "value": a.href,
       "children":[]
     
     }
   
  
   }));
-  urlList = hrefs.slice(0,5)
+  urlList = hrefs.slice(0,7)
   hrefs=""
   console.log(urlList)
   await browser.close();
