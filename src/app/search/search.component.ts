@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 // import dataTreeSimple from '../../assets/data-tree-simple';
 import * as d3 from 'd3'
 import { Router } from '@angular/router';
+import { TreeMapService } from '../tree-map.service';
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -22,14 +23,16 @@ export class SearchComponent {
     "Sitemap"
   ]
   headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
-
-  siteMapLinks
+  newSiteLinks = []
+  siteMapLinks = []
   metaTagLinks
   imageContent: any
   URL: any;
   data: any[];
   selectedNode: any;
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private treeMapService: TreeMapService,
+    private http: HttpClient, private router: Router) {
 
     // this.data = dataTreeSimple.result;
 
@@ -68,24 +71,36 @@ export class SearchComponent {
         this.fetchMetaData(url);
         break;
       case 'Sitemap':
-        this.fetchSiteMap();
+        this.fetchSiteMap(url);
         break;
       default:
         break;
     }
   }
-  fetchSiteMap() {
+  async fetchSiteMap(url) {
     console.log("sitemap links")
-    this.http.post<any>('http://localhost:3000/url', { url: this.URL, type: 'sitemap' }, { headers: this.headers }).subscribe(response => {
+    let links = this.http.post<any>('http://localhost:3000/url', { url: url, type: 'sitemap' }, { headers: this.headers }).toPromise()
+    links.then(response => {
+      this.siteMapLinks = response
+      // this.refetchLinks();
+      for (let i = 0; i < this.siteMapLinks.length; i++) {
+        if (this.siteMapLinks[i].tooltip != '') {
+          let links2 = this.http.post<any>('http://localhost:3000/url', { url: this.siteMapLinks[i].tooltip, type: 'sitemap' }, { headers: this.headers }).toPromise()
+          links2.then(response2 => {
+            this.siteMapLinks[i].children.push(response2)
+          })
+        }
 
-      this.siteMapLinks = response.slice(0, 11)
-      console.log('sitemap received', this.siteMapLinks)
-    },
-      (error) => {                              //Error callback
-        console.error('error caught in component')
       }
-    )
+
+
+    })
+
+    this.treeMapService.data = this.siteMapLinks
+    console.log(this.siteMapLinks)
+
   }
+
   fetchMetaData(url) {
     console.log("metadata links", url)
     this.http.post<any>('http://localhost:3000/url', { url: url, type: 'meta' }, { headers: this.headers }).subscribe(response => {

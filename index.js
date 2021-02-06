@@ -8,14 +8,12 @@ const { getMeta } = require('./meta');
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
 
-
+var count = 0
 const ignoreUrls = ['', 'javascript: void(0)', '#']
 
 var URL =""
-var urlList = new Set()
 var imageList
 var metaList
-
 
 app.use(function (req, res, next) {
   //Enabling CORS
@@ -33,12 +31,13 @@ app.get('/', function (req, res) {
 
 app.post('/url',(async (req, res)=> {
   const { url, type } = req.body;
+
   URL = url
   console.log(type, "type")
 if(type=='sitemap') {
   console.log("sitemap requested")
+  urlList=[]
   await fetchURLS()
-  console.log("after fetch urls", urlList)
   return res.status(200).json( urlList )
 
 }
@@ -82,59 +81,45 @@ async function fetchMetaTags() {
   });
   console.log(await metaList.jsonValue());  
   metaList = await metaList.jsonValue()
-  // console.log(metaList)
-  // const robots = await page.evaluate(() => document.querySelectorAll("head > meta[name='robots']")[0].content);
-  // // const description = await page.evaluate(() => document.querySelectorAll("head > meta[itemprop='description']")[0].content);
-  // // const description = await page.evaluate(() => document.querySelectorAll("head > meta[itemprop='image']")[0].content);
-  // const pageType = await page.evaluate(() => document.querySelectorAll("head > meta[property='pageType']")[0].content);
-  // const subpageType = await page.evaluate(() => document.querySelectorAll("head > meta[property='subpageType']")[0].content);
-  // const ogType = await page.evaluate(() => document.querySelectorAll("head > meta[property='og:type']")[0].content);
-  // const ogDescription = await page.evaluate(() => document.querySelectorAll("head > meta[property='og:description']")[0].content);
-  // const ogSitename = await page.evaluate(() => document.querySelectorAll("head > meta[property='og:site_name']")[0].content);
-  // const ogImage = await page.evaluate(() => document.querySelectorAll("head > meta[property='og:image']")[0].content);
-  // const ogTitle = await page.evaluate(() => document.querySelectorAll("head > meta[property='og:title']")[0].content);
 
-// metaList = {
-//   description,
-//   robots,
-//   subpageType,
-//   pageType,
-//   ogType,
-//   ogDescription,
-//   ogSitename,
-//   ogImage,
-//   ogTitle
-
-// }
-
-
-//   console.table({
-//     description,
-//     robots,
-//     subpageType,
-//     pageType
-//   })
-  // metaList = grupos
   await browser.close();
 
-  // console.log(links, "links")
 }
+var urlList = []
+
 async function fetchURLS() {
+  urlList=[]
+
   const browser = await puppeteer.launch({headless:true});
   const page = await browser.newPage();
-  console.log(URL, "weburl")
-  let hrefs = await page.$$eval('a', as => as.map(a => 
-    {
-      return {
-        "hrefs" :  a.href, 
-        "label" : a.getAttribute('aria-label')
-      }
+  await page.goto(URL);
+  console.log(URL, "weburl", urlList)
 
-    }));
-  // hrefs = hrefs.filter(href =>   ignoreUrls.includes(href) || !href.includes(URL)  ? '' : href )
-  urlList = [...new Set(hrefs)]
-  console.log(urlList, "links and labels")
-
+  let hrefs = await page.$$eval('a', as => as.map(a => {
+    return{
+      // link : a.href,
+      // class: a.classList,
+      // name: a.textContent,
+      // title:a.getAttribute('title'),
+      // type: a.getAttribute('type'),
+      // media: a.getAttribute('media'),
+      "name": a.textContent.trim(),
+      "tooltip": a.href,
+      "contextMenu": {
+        "title": a.textContent.trim(),
+        "content": a.href,
+        "subContent": ""
+      },
+      "value": 100,
+      "children":[]
+    
+    }
+  
+ 
+  }));
+  urlList = hrefs.slice(0,25)
+  hrefs=""
+  console.log(urlList)
   await browser.close();
 
 }
@@ -158,19 +143,19 @@ async function run(){
     // urlList = new Set(hrefs)
 
     // console.log(urlList, "url list")
-    // setTimeout(()=>{},1000);
-    // let length = urlList.size;
-    // console.log(length)
-    // for(let url of urlList) {
-    //     await page.goto(url);
-    //     let hrefs = await page.$$eval('a', as => as.map(a => a.href));
-    //     hrefs = hrefs.filter(href =>   ignoreUrls.includes(href) || !href.includes(URL)  ? '' : href )
+//     setTimeout(()=>{},1000);
+//     let length = urlList.size;
+//     console.log(length)
+//     for(let url of urlList) {
+//         await page.goto(url);
+//         let hrefs = await page.$$eval('a', as => as.map(a => a.href));
+//         hrefs = hrefs.filter(href =>   ignoreUrls.includes(href) || !href.includes(URL)  ? '' : href )
 
-    //     urlList.add(new Set(hrefs))
-    //     console.log(hrefs, `URL List for ${url}`)
-    //     setTimeout(()=>{},200);
-    // } 
-    // console.log("Final list")
+//         urlList.add(new Set(hrefs))
+//         console.log(hrefs, `URL List for ${url}`)
+//         setTimeout(()=>{},200);
+//     } 
+//     console.log("Final list")
 
 //get Metadata
 
