@@ -103,7 +103,7 @@ async function fetchURLS() {
       // title:a.getAttribute('title'),
       // type: a.getAttribute('type'),
       // media: a.getAttribute('media'),
-      "name": a.textContent.trim(),
+      "name": a.textContent.trim() + Math.random(1),
       "tooltip": a.href,
       "contextMenu": {
         "title": a.textContent.trim(),
@@ -117,7 +117,7 @@ async function fetchURLS() {
   
  
   }));
-  urlList = hrefs.slice(0,25)
+  urlList = hrefs.slice(0,5)
   hrefs=""
   console.log(urlList)
   await browser.close();
