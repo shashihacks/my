@@ -11,7 +11,7 @@ import { TreeMapService } from '../tree-map.service';
 })
 export class SearchComponent {
   @ViewChild('chart4', { static: true }) private chartContainer: ElementRef;
-
+  treemap: boolean = false
   data: any
   name: any;
   root: any;
@@ -66,6 +66,7 @@ export class SearchComponent {
   URL: any;
   // data: any[];
   selectedNode: any;
+  loading: boolean;
   constructor(
     private treeMapService: TreeMapService,
     private http: HttpClient, private router: Router) {
@@ -114,6 +115,7 @@ export class SearchComponent {
     }
   }
   async fetchSiteMap(url) {
+    this.loading = true
     console.log("sitemap links")
     let links = this.http.post<any>('http://localhost:3000/url', { url: url, type: 'sitemap' }, { headers: this.headers }).toPromise()
     links.then(response => {
@@ -143,7 +145,13 @@ export class SearchComponent {
       let treeInterval = setInterval(() => {
         console.log("waiting for render", count)
         if (count >= 4) {
+
+          //render inner children
+
+
           console.log("rendering")
+          this.loading = false
+
           this.renderTreeChart()
           clearInterval(treeInterval)
         }
@@ -153,6 +161,7 @@ export class SearchComponent {
   }
 
   fetchMetaData(url) {
+    // this.treemap = false
     console.log("metadata links", url)
     this.http.post<any>('http://localhost:3000/url', { url: url, type: 'meta' }, { headers: this.headers }).subscribe(response => {
 

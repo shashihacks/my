@@ -59,7 +59,7 @@
 .d3-chart {
   width: 100%;
   min-height:600px;
-  border: 1px solid gray;
+  border: 1px solid #1242ca;
   overflow-y: scroll;
   overflow-x: hidden;
   height: 600px;
@@ -147,9 +147,9 @@ background: red;
 
 
 .lds-facebook {
-  display: inline-block;
+  margin: 0 auto;
   position: relative;
-  width: 80px;
+  width: 200px;
   height: 80px;
 }
 .lds-facebook div {
@@ -171,6 +171,10 @@ background: red;
 .lds-facebook div:nth-child(3) {
   left: 56px;
   animation-delay: 0;
+}
+
+.lds-facebook h6 {
+  margin-left: -20%;
 }
 @keyframes lds-facebook {
   0% {

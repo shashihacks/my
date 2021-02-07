@@ -92,7 +92,7 @@ async function fetchURLS() {
 
   const browser = await puppeteer.launch({headless:true});
   const page = await browser.newPage();
-  await page.goto(URL);
+  await page.goto(URL, {waitUntil: 'load', timeout: 0});
   console.log(URL, "weburl", urlList)
 
   let hrefs = await page.$$eval('a', as => as.map(a => {
@@ -122,49 +122,13 @@ async function fetchURLS() {
 async function run(){
   const browser = await puppeteer.launch({headless:true});
   const page = await browser.newPage();
-  await page.goto(URL);
+  await page.goto(URL, {waitUntil: 'load', timeout: 0});
   // get Images
   console.log("getting Images")
   imageList = [...new Set(await page.evaluate(
     () =>Array.from(document.querySelectorAll('img'),
                    a =>  { return {source: a.getAttribute('src'), label: a.getAttribute('alt')}  }   )))];
     console.log(imageList, "list in run")
-
-
-// Get URLS
-    // let hrefs = await page.$$eval('a', as => as.map(a => a.href));
-    // hrefs = hrefs.filter(href =>   ignoreUrls.includes(href) || !href.includes(URL)  ? '' : href )
-    // urlList = new Set(hrefs)
-
-    // console.log(urlList, "url list")
-//     setTimeout(()=>{},1000);
-//     let length = urlList.size;
-//     console.log(length)
-//     for(let url of urlList) {
-//         await page.goto(url);
-//         let hrefs = await page.$$eval('a', as => as.map(a => a.href));
-//         hrefs = hrefs.filter(href =>   ignoreUrls.includes(href) || !href.includes(URL)  ? '' : href )
-
-//         urlList.add(new Set(hrefs))
-//         console.log(hrefs, `URL List for ${url}`)
-//         setTimeout(()=>{},200);
-//     } 
-//     console.log("Final list")
-
-//get Metadata
-
-
-    //Get Audio Files
-
-
-    //Get Video Content
-
-
-    
-
-
-
-    
     await browser.close();
 };
 

@@ -60,7 +60,21 @@
 
 
     <!-- sitemap -->
-    <div id="tree" class="hierarchy-container d3-chart container tree" #chart4></div>
+
+    <div class="sitemap-container">
+
+        <div id="tree" class="hierarchy-container d3-chart container tree" #chart4>
+
+            <div *ngIf="loading" class="lds-facebook">
+
+                <div></div>
+                <div></div>
+                <div></div>
+                <h6>Constructing Domain Tree..</h6>
+            </div>
+        </div>
+    </div>
+
 
 
 </div>
