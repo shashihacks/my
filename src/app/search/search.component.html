@@ -20,7 +20,7 @@
             (click)="clicked = (content === type ? null :type)" (click)="onContentFetch(type , searchURL.value)">
             {{type}}
         </span>
-        <input type="text" class="text custom-text">
+
 
     </div>
 
@@ -110,6 +110,9 @@
         </div>
     </div>
 
+    <ng-container [ngSwitch]="">
+        <ng-container *ngSwitchCase="'a'">Code A</ng-container>
+    </ng-container>
 
 
 </div>

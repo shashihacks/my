@@ -9,6 +9,7 @@ import { TreeMapService } from '../tree-map.service';
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss']
 })
+
 export class SearchComponent {
   @ViewChild('chart4', { static: true }) private chartContainer: ElementRef;
   treemap: boolean = false
@@ -97,7 +98,7 @@ export class SearchComponent {
     this.content = contentType
     switch (contentType) {
       case 'Images':
-        this.fetchImages();
+        this.fetchImages(url);
         break;
       case 'Audio':
         this.fetchAudio(url);
@@ -207,8 +208,19 @@ export class SearchComponent {
       }
     )
   }
-  fetchImages() {
+  fetchImages(url) {
     console.log("image links")
+    console.log("clicked", url)
+    this.URL = url
+    this.http.post<any>('http://localhost:3000/url', { url: url, }, { headers: this.headers }).subscribe(response => {
+      console.log('response received', response)
+      this.imageContent = response
+
+    },
+      (error) => {                              //Error callback
+        console.error('error caught in component')
+      }
+    )
   }
 
 
@@ -588,7 +600,7 @@ export class SearchComponent {
     return '#fff';
   }
 
-  collapseAllChildren(node) { // https://stackoverflow.com/questions/19423396/d3-js-how-to-make-all-the-nodes-collapsed-in-collapsible-indented-tree
+  collapseAllChildren(node) {
     if (node.children) {
       node.children.forEach(function (c) {
         this.collapseAllChildren(c);
@@ -623,7 +635,7 @@ export class SearchComponent {
   }
 
   // Returns a list of all nodes under the root.
-  doResetPath(d) { // https://stackoverflow.com/questions/19423396/d3-js-how-to-make-all-the-nodes-collapsed-in-collapsible-indented-tree
+  doResetPath(d) {
     if (d.children) {
       d.children.forEach(function (c) { this.doResetPath(c); }.bind(this));
       d.color = undefined;
