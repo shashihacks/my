@@ -14,11 +14,14 @@
     </div>
 
 
+
     <div class="selections">
         <span class="chip " *ngFor="let type of contentTypes" [class.selected]="content === type"
             (click)="clicked = (content === type ? null :type)" (click)="onContentFetch(type , searchURL.value)">
             {{type}}
         </span>
+        <input type="text" class="text custom-text">
+
     </div>
 
 
@@ -33,6 +36,37 @@
         </div>
     </div>
 
+
+    <!-- audio content  -->
+
+    <div *ngFor="let audio of audioContent; let i=index">
+        <div class="card" style="max-width: 18rem; float: left;">
+            <img class="card-img-top rounded audio-image " src="../../assets//music.png" alt="Card image cap">
+            <div class="card-body">
+                <audio controls style="width: 258px;">
+                    <source src="{{audio.source}}">
+                    Your browser does not support the audio element.
+                </audio>
+                <table>
+                    <thead>
+                        <tr>
+
+                            <th scope="col">ClassName</th>
+                            <th scope="col">Preload</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+
+                            <td class="no-wrap pull-left"> {{audio.className}}</td>
+                            <td class="no-wrap float-end"> {{audio.preload}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
 
     <!-- Meta data  -->
@@ -62,8 +96,9 @@
     <!-- sitemap -->
 
     <div class="sitemap-container">
-
         <div id="tree" class="hierarchy-container d3-chart container tree" #chart4>
+            <button style="margin: 1% auto; display:flex" class="btn btn-primary center"
+                (click)="renderTreeChart(); loading=false">Force Render</button>
 
             <div *ngIf="loading" class="lds-facebook">
 

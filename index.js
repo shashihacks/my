@@ -14,6 +14,7 @@ const ignoreUrls = ['', 'javascript: void(0)', '#']
 var URL =""
 var imageList
 var metaList
+var audioList
 
 app.use(function (req, res, next) {
   //Enabling CORS
@@ -41,6 +42,11 @@ if(type=='sitemap') {
   return res.status(200).json( urlList )
 
 }
+if(type=='audio') {
+  console.log("audio content requested on" , URL)
+  await fetchAudioContent()
+  return res.status(200).json( audioList)
+}
 
 if(type=='meta') {
   console.log("meta info requested")
@@ -66,6 +72,30 @@ if(type=='meta') {
 app.listen(3000, ()=> {
   console.log("server running on 3000")
 })
+
+
+async function fetchAudioContent() {
+  const browser = await puppeteer.launch({headless:true});
+  const page = await browser.newPage();
+  await page.goto(URL, {waitUntil: 'load', timeout: 0});
+  console.log(URL, "aduio fetch url")
+  let audioLinks = await page.$$eval('audio', as => as.map(a => {
+
+    return {
+      source: a.getAttribute('src'),
+      preload: a.getAttribute('preload') ?  a.getAttribute('preload') :  'unspecified',
+      className: a.getAttribute('class') ?  a.getAttribute('class') : a.getAttribute('id') ? a.getAttribute('id') : 'Unknown identifier',
+      type: a.getAttribute('type') ? a.getAttribute('type') : 'Unspecified Type'
+    }
+  }))
+
+  audioList = audioLinks;
+  console.log("fetched audio content")
+  console.log(audioList)
+  await browser.close();
+
+
+}
 
 async function fetchMetaTags() {
   const browser = await puppeteer.launch({headless:true});
@@ -111,7 +141,7 @@ async function fetchURLS() {
   
  
   }));
-  urlList = hrefs.slice(0,7)
+  urlList = hrefs.slice(0,5)
   hrefs=""
   console.log(urlList)
   await browser.close();

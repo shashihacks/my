@@ -67,6 +67,7 @@ export class SearchComponent {
   // data: any[];
   selectedNode: any;
   loading: boolean;
+  audioContent: any;
   constructor(
     private treeMapService: TreeMapService,
     private http: HttpClient, private router: Router) {
@@ -99,7 +100,7 @@ export class SearchComponent {
         this.fetchImages();
         break;
       case 'Audio':
-        this.fetchAudio();
+        this.fetchAudio(url);
         break;
       case 'Video':
         this.fetchVideo();
@@ -146,14 +147,31 @@ export class SearchComponent {
         console.log("waiting for render", count)
         if (count >= 4) {
 
+          //remove for level 2 
+          let level3count = 0
           //render inner children
+          for (let i = 0; i < this.siteMapLinks.children.length; i++) {
+            for (let j = i; j < this.siteMapLinks.children[i].children.length; j++) {
+              if (this.siteMapLinks.children[i].children[j].tooltip != '') {
+                let links3 = this.http.post<any>('http://localhost:3000/url', { url: this.siteMapLinks.children[i].children[j].tooltip, type: 'sitemap' }, { headers: this.headers }).toPromise()
+                links3.then(response3 => {
+                  level3count += 1
+                  this.siteMapLinks.children[i].children[j].children = response3
+                  console.log(response3, "level 3 depth")
+                })
+              }
+            }
 
+          }
 
           console.log("rendering")
-          this.loading = false
 
-          this.renderTreeChart()
-          clearInterval(treeInterval)
+          if (level3count >= 25) {
+            this.loading = false
+            this.renderTreeChart()
+            clearInterval(treeInterval)
+          }
+
         }
       }, 500)
 
@@ -176,8 +194,18 @@ export class SearchComponent {
   fetchVideo() {
     console.log("video links")
   }
-  fetchAudio() {
+  fetchAudio(url) {
     console.log("audio links")
+    console.log("metadata links", url)
+    this.http.post<any>('http://localhost:3000/url', { url: url, type: 'audio' }, { headers: this.headers }).subscribe(response => {
+
+      this.audioContent = response
+      console.log('audio content received', this.audioContent)
+    },
+      (error) => {                              //Error callback
+        console.error('error caught in audio/component')
+      }
+    )
   }
   fetchImages() {
     console.log("image links")
