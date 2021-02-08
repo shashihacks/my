@@ -141,7 +141,7 @@ async function fetchURLS() {
   
  
   }));
-  urlList = hrefs.slice(0,5)
+  urlList = hrefs.slice(0,10)
   hrefs=""
   console.log(urlList)
   await browser.close();

@@ -151,27 +151,28 @@ export class SearchComponent {
           //remove for level 2 
           let level3count = 0
           //render inner children
-          for (let i = 0; i < this.siteMapLinks.children.length; i++) {
-            for (let j = i; j < this.siteMapLinks.children[i].children.length; j++) {
-              if (this.siteMapLinks.children[i].children[j].tooltip != '') {
-                let links3 = this.http.post<any>('http://localhost:3000/url', { url: this.siteMapLinks.children[i].children[j].tooltip, type: 'sitemap' }, { headers: this.headers }).toPromise()
-                links3.then(response3 => {
-                  level3count += 1
-                  this.siteMapLinks.children[i].children[j].children = response3
-                  console.log(response3, "level 3 depth")
-                })
-              }
-            }
+          // for (let i = 0; i < this.siteMapLinks.children.length; i++) {
+          //   for (let j = i; j < this.siteMapLinks.children[i].children.length; j++) {
+          //     if (this.siteMapLinks.children[i].children[j].tooltip != '') {
+          //       let links3 = this.http.post<any>('http://localhost:3000/url', { url: this.siteMapLinks.children[i].children[j].tooltip, type: 'sitemap' }, { headers: this.headers }).toPromise()
+          //       links3.then(response3 => {
+          //         level3count += 1
+          //         this.siteMapLinks.children[i].children[j].children = response3
+          //         console.log(response3, "level 3 depth")
+          //       })
+          //     }
+          //   }
 
-          }
+          // }
 
           console.log("rendering")
 
-          if (level3count >= 25) {
-            this.loading = false
-            this.renderTreeChart()
-            clearInterval(treeInterval)
-          }
+          // if (level3count >= 25) {
+          this.loading = false
+          console.log("final sitemap links")
+          this.renderTreeChart()
+          clearInterval(treeInterval)
+          // }
 
         }
       }, 500)

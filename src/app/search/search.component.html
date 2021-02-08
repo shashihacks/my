@@ -24,84 +24,110 @@
 
     </div>
 
-
-    <div *ngFor="let image of imageContent">
-        <div class="card" style="max-width: 18rem; float: left;">
-            <img class="card-img-top rounded " src="{{image.source}}" alt="Card image cap">
-            <div class="card-body">
-                <h5 class="card-title">{{image.label || 'No Label'}}</h5>
-                <a target="_blank" href="{{image.source}}" class="btn btn-primary m-2">Visit Image</a>
-                <a target="_blank" href="{{URL}}" class="btn btn-primary m-2">Visit Page</a>
+    <ng-container [ngSwitch]="true">
+        <ng-container *ngSwitchCase="content === 'Images'">
+            <h3 *ngIf="imageContent">Image Retrieval</h3>
+            <div *ngFor="let image of imageContent">
+                <div class="card" style="max-width: 18rem; float: left;">
+                    <img class="card-img-top rounded " src="{{image.source}}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{image.label || 'No Label'}}</h5>
+                        <a target="_blank" href="{{image.source}}" class="btn btn-primary m-2">Visit Image</a>
+                        <a target="_blank" href="{{URL}}" class="btn btn-primary m-2">Visit Page</a>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="content === 'Metadata'">
+            <!-- Meta data  -->
+            <h3 *ngIf="metaTagLinks">MetaInfo Reterieval</h3>
+            <table *ngIf="metaTagLinks" class="table table-bordered table-striped table-responsive"
+                style="max-width: 60%; margin: 0 auto;">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Tag Type</th>
+                        <th scope="col">Value</th>
+                        <th scope="col">Content</th>
 
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let tag of metaTagLinks; let i=index">
+                        <th scope="row">{{i+1}}</th>
+                        <td class="no-wrap">{{tag?.name!='' ? 'name' : 'Property'}}</td>
+                        <td class="no-wrap">{{tag?.name }}</td>
+                        <td class="word-wrap">{{tag?.content}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </ng-container>
+        <ng-container *ngSwitchCase="content === 'Audio'">
+            <!-- audio content  -->
+            <h3 *ngIf="audioContent">Audio Retrieval</h3>
+            <h3 *ngIf="!audioContent">No Audio Content Available or Retrievad</h3>
+            <div *ngFor="let audio of audioContent; let i=index">
+                <div class="card" style="max-width: 18rem; float: left;">
+                    <img class="card-img-top rounded audio-image " src="../../assets//music.png" alt="Card image cap">
+                    <div class="card-body">
+                        <audio controls style="width: 258px;">
+                            <source src="{{audio.source}}">
+                            Your browser does not support the audio element.
+                        </audio>
+                        <table>
+                            <thead>
+                                <tr>
 
-    <!-- audio content  -->
+                                    <th scope="col">ClassName</th>
+                                    <th scope="col">Preload</th>
 
-    <div *ngFor="let audio of audioContent; let i=index">
-        <div class="card" style="max-width: 18rem; float: left;">
-            <img class="card-img-top rounded audio-image " src="../../assets//music.png" alt="Card image cap">
-            <div class="card-body">
-                <audio controls style="width: 258px;">
-                    <source src="{{audio.source}}">
-                    Your browser does not support the audio element.
-                </audio>
-                <table>
-                    <thead>
-                        <tr>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
 
-                            <th scope="col">ClassName</th>
-                            <th scope="col">Preload</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-
-                            <td class="no-wrap pull-left"> {{audio.className}}</td>
-                            <td class="no-wrap float-end"> {{audio.preload}}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                                    <td class="no-wrap pull-left"> {{audio.className}}</td>
+                                    <td class="no-wrap float-end"> {{audio.preload}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+
+        </ng-container>
+
+        <ng-container *ngSwitchDefault>
+            <h3>Image Retrieval</h3>
+            <div *ngFor="let image of imageContent">
+                <div class="card" style="max-width: 18rem; float: left;">
+                    <img class="card-img-top rounded " src="{{image.source}}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{image.label || 'No Label'}}</h5>
+                        <a target="_blank" href="{{image.source}}" class="btn btn-primary m-2">Visit Image</a>
+                        <a target="_blank" href="{{URL}}" class="btn btn-primary m-2">Visit Page</a>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </ng-container>
 
 
-    <!-- Meta data  -->
 
-    <table *ngIf="metaTagLinks" class="table table-bordered table-striped table-responsive"
-        style="max-width: 60%; margin: 0 auto;">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Tag Type</th>
-                <th scope="col">Value</th>
-                <th scope="col">Content</th>
 
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let tag of metaTagLinks; let i=index">
-                <th scope="row">{{i+1}}</th>
-                <td class="no-wrap">{{tag?.name!='' ? 'name' : 'Property'}}</td>
-                <td class="no-wrap">{{tag?.name }}</td>
-                <td class="word-wrap">{{tag?.content}}</td>
-            </tr>
-        </tbody>
-    </table>
+
+
 
 
     <!-- sitemap -->
 
-    <div class="sitemap-container">
+    <div class="sitemap-container" *ngIf="content==='Sitemap'">
         <div id="tree" class="hierarchy-container d3-chart container tree" #chart4>
-            <button style="margin: 1% auto; display:flex" class="btn btn-primary center"
-                (click)="renderTreeChart(); loading=false">Force Render</button>
+
 
             <div *ngIf="loading" class="lds-facebook">
-
+                <button style="margin: 1% auto; display:flex" class="btn btn-primary center"
+                    (click)="renderTreeChart(); loading=false">Force Render</button>
                 <div></div>
                 <div></div>
                 <div></div>
