@@ -97,7 +97,7 @@
 
         </ng-container>
 
-        <ng-container *ngSwitchDefault>
+        <!-- <ng-container *ngSwitchDefault>
             <h3>Image Retrieval</h3>
             <div *ngFor="let image of imageContent">
                 <div class="card" style="max-width: 18rem; float: left;">
@@ -109,7 +109,7 @@
                     </div>
                 </div>
             </div>
-        </ng-container>
+        </ng-container> -->
     </ng-container>
 
 
@@ -121,7 +121,7 @@
 
     <!-- sitemap -->
 
-    <div class="sitemap-container" *ngIf="content==='Sitemap'">
+    <div class="sitemap-container">
         <div id="tree" class="hierarchy-container d3-chart container tree" #chart4>
 
 
@@ -136,9 +136,7 @@
         </div>
     </div>
 
-    <ng-container [ngSwitch]="">
-        <ng-container *ngSwitchCase="'a'">Code A</ng-container>
-    </ng-container>
+
 
 
 </div>
