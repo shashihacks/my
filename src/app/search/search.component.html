@@ -126,13 +126,18 @@
         <div id="tree" class="hierarchy-container d3-chart container tree" #chart4>
 
 
-            <div *ngIf="loading" class="lds-facebook">
+            <div *ngIf="loading">
                 <button style="margin: 1% auto; display:flex" class="btn btn-primary center"
                     (click)="renderTreeChart(); loading=false">Force Render</button>
+
+                <h6 style="display:flex; justify-content:center">Constructing Domain Tree..</h6>
+
+            </div>
+            <div *ngIf="loading" class="lds-facebook">
+
                 <div></div>
                 <div></div>
                 <div></div>
-                <h6>Constructing Domain Tree..</h6>
             </div>
         </div>
     </div>
