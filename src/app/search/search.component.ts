@@ -52,10 +52,10 @@ export class SearchComponent {
   headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
   newSiteLinks = []
   siteMapLinks = {
-    "name": "A1",
-    "tooltip": "A1 tooltip",
+    "name": "Home",
+    "tooltip": "Home tooltip",
     "contextMenu": {
-      "title": "A1",
+      "title": "Home",
       "content": "https://www.bookmyshow.com",
       "subContent": ""
     },
