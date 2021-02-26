@@ -98,6 +98,51 @@
 
         </ng-container>
 
+
+
+
+
+        <ng-container *ngSwitchCase="content === 'Video'">
+            <!-- audio content  -->
+            <h3 *ngIf="videoContent">Video Retrieval</h3>
+            <h3 *ngIf="!videoContent">No Video Content Available or Retrievad</h3>
+            <div *ngFor="let video of videoContent; let i=index">
+
+                <div class="card" style="max-width: 20rem; float: left; cursor: pointer;"
+                    (click)="navigateToSource(video.link)">
+                    <!-- <img class="card-img-top rounded audio-image " src="../../assets//music.png" alt="Card image cap"> -->
+                    <div class="card-body">
+                        <video controls style="width: 100%;">
+                            <source src="{{video.source}}">
+                            Your browser does not support the audio element.
+                        </video>
+                        <table>
+                            <thead>
+                                <tr>
+
+                                    <th scope="col">ClassName/Id</th>
+                                    <th scope="col">Preload</th>
+                                    <!-- <th scope="col">Page Link</th> -->
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                    <td class="no-wrap pull-left"> {{video.className}}</td>
+                                    <td class="no-wrap float-end"> {{video.preload}}</td>
+                                    <!-- <td class="no-wrap float-end"> {{video.link}}</td> -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </ng-container>
+
         <!-- <ng-container *ngSwitchDefault>
             <h3>Image Retrieval</h3>
             <div *ngFor="let image of imageContent">

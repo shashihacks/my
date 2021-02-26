@@ -15,6 +15,7 @@ var URL =""
 var imageList
 var metaList
 var audioList
+var videoList
 
 app.use(function (req, res, next) {
   //Enabling CORS
@@ -46,6 +47,12 @@ if(type=='audio') {
   console.log("audio content requested on" , URL)
   await fetchAudioContent()
   return res.status(200).json( audioList)
+}
+
+if(type=='video') {
+  console.log("Video content requested on" , URL)
+  await fetchVideoContent()
+  return res.status(200).json( videoList)
 }
 
 if(type=='meta') {
@@ -93,9 +100,38 @@ async function fetchAudioContent() {
   console.log("fetched audio content")
   console.log(audioList)
   await browser.close();
-
-
 }
+
+
+
+
+//video content
+
+async function fetchVideoContent() {
+  const browser = await puppeteer.launch({headless:true});
+  const page = await browser.newPage();
+  await page.goto(URL, {waitUntil: 'load', timeout: 0});
+  console.log(URL, "Video fetch url")
+  let videoLinks = await page.$$eval('video  > source', as => as.map(a => {
+
+    return {
+      source: a.getAttribute('src'),
+      link: a.getAttribute('src'),
+      preload: a.getAttribute('preload') ?  a.getAttribute('preload') :  'unspecified',
+      className: a.getAttribute('class') ?  a.getAttribute('class') : a.getAttribute('id') ? a.getAttribute('id') : 'Unknown identifier',
+      type: a.getAttribute('type') ? a.getAttribute('type') : 'Unspecified Type'
+    }
+  }))
+
+  videoList = videoLinks;
+  // console.log("fetched Video content")
+  console.log(videoList)
+  await browser.close();
+}
+
+
+
+
 
 async function fetchMetaTags() {
   const browser = await puppeteer.launch({headless:true});

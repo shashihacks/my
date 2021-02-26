@@ -70,6 +70,7 @@ export class SearchComponent {
   selectedNode: any;
   loading: boolean;
   audioContent: any;
+  videoContent: any;
   constructor(
     private treeMapService: TreeMapService,
     private http: HttpClient, private router: Router) {
@@ -106,7 +107,7 @@ export class SearchComponent {
         this.fetchAudio(url);
         break;
       case 'Video':
-        this.fetchVideo();
+        this.fetchVideo(url);
         break;
       case 'Metadata':
         this.fetchMetaData(url);
@@ -197,12 +198,20 @@ export class SearchComponent {
       }
     )
   }
-  fetchVideo() {
+  fetchVideo(url) {
     console.log("video links")
+    this.http.post<any>('http://localhost:3000/url', { url: url, type: 'video' }, { headers: this.headers }).subscribe(response => {
+
+      this.videoContent = response
+      console.log('Video content received', this.videoContent)
+    },
+      (error) => {                              //Error callback
+        console.error('error caught in video/component')
+      }
+    )
   }
   fetchAudio(url) {
     console.log("audio links")
-    console.log("metadata links", url)
     this.http.post<any>('http://localhost:3000/url', { url: url, type: 'audio' }, { headers: this.headers }).subscribe(response => {
 
       this.audioContent = response
@@ -228,7 +237,12 @@ export class SearchComponent {
     )
   }
 
-
+  navigateToSource(url) {
+    console.log(url)
+    // window.location.href = url
+    window.open(url, '_blank')
+    // this.router.navigateByUrl(url)
+  }
   ngAfterViewInit(): void {
 
     // this.renderTreeChart();
