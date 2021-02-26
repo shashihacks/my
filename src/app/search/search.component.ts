@@ -49,22 +49,23 @@ export class SearchComponent {
     "Metadata",
     "Sitemap"
   ]
+  URL: any;
   headers = new HttpHeaders({ 'Content-Type': 'application/json; charset=utf-8' });
   newSiteLinks = []
   siteMapLinks = {
     "name": "Home",
-    "tooltip": "Home tooltip",
+    "tooltip": "Index Page",
     "contextMenu": {
       "title": "Home",
-      "content": "https://www.bookmyshow.com",
+      "content": "https://www.bookmyshow.com",//URL
       "subContent": ""
     },
-    "value": 100,
+    "value": URL,
     "children": []
   }
   metaTagLinks
   imageContent: any
-  URL: any;
+
   // data: any[];
   selectedNode: any;
   loading: boolean;
