@@ -57,7 +57,7 @@ export class SearchComponent {
     "tooltip": "Index Page",
     "contextMenu": {
       "title": "Home",
-      "content": "https://www.bookmyshow.com",//URL
+      "content": URL,
       "subContent": ""
     },
     "value": URL,
@@ -76,6 +76,7 @@ export class SearchComponent {
 
     // this.data = dataTreeSimple.result;
 
+    //Sample dummy data for graph
     // this.data = this.treeMapService.data
   }
 
@@ -152,33 +153,35 @@ export class SearchComponent {
           //remove for level 2 
           let level3count = 0
           //render inner children
-          // for (let i = 0; i < this.siteMapLinks.children.length; i++) {
-          //   for (let j = i; j < this.siteMapLinks.children[i].children.length; j++) {
-          //     if (this.siteMapLinks.children[i].children[j].tooltip != '') {
-          //       let links3 = this.http.post<any>('http://localhost:3000/url', { url: this.siteMapLinks.children[i].children[j].tooltip, type: 'sitemap' }, { headers: this.headers }).toPromise()
-          //       links3.then(response3 => {
-          //         level3count += 1
-          //         this.siteMapLinks.children[i].children[j].children = response3
-          //         console.log(response3, "level 3 depth")
-          //       })
-          //     }
-          //   }
+          for (let i = 0; i < this.siteMapLinks.children.length; i++) {
+            for (let j = i; j < this.siteMapLinks.children[i].children.length; j++) {
+              if (this.siteMapLinks.children[i].children[j].tooltip != '') {
+                let links3 = this.http.post<any>('http://localhost:3000/url', { url: this.siteMapLinks.children[i].children[j].tooltip, type: 'sitemap' }, { headers: this.headers }).toPromise()
+                links3.then(response3 => {
+                  level3count += 1
+                  this.siteMapLinks.children[i].children[j].children = response3
+                  console.log(response3, "level 3 depth")
+                })
+              }
+            }
 
-          // }
+          }
 
           console.log("rendering")
 
-          // if (level3count >= 25) {
-          this.loading = false
-          console.log("final sitemap links")
-          this.renderTreeChart()
-          clearInterval(treeInterval)
-          // }
+          if (level3count >= 25) {
+            this.loading = false
+            console.log("final sitemap links")
+            this.renderTreeChart()
+            clearInterval(treeInterval)
+          }
 
         }
       }, 500)
 
     })
+
+    console.log("sitemap links 3 levels", this.siteMapLinks)
   }
 
   fetchMetaData(url) {
@@ -339,7 +342,6 @@ export class SearchComponent {
       .duration(this.duration)
       .style("height", height + "px");
 
-    // Compute the "layout". TODO https://github.com/d3/d3-hierarchy/issues/67
     let index = -1;
     this.root.eachBefore(function (d) {
       ++index;

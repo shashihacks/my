@@ -74,7 +74,63 @@ export class TreeMapService {
               "content": "",
               "subContent": ""
             },
-            "value": 100
+            "value": 100,
+            "children": [
+              {
+                "name": "D5",
+                "tooltip": "D5 tooltip",
+                "contextMenu": {
+                  "title": "C4 | B2 | A1 | D5",
+                  "content": "",
+                  "subContent": ""
+                }
+              },
+              {
+                "name": "D6",
+                "tooltip": "D6 tooltip",
+                "contextMenu": {
+                  "title": "C4 | B2 | A1 | D6",
+                  "content": "",
+                  "subContent": ""
+                }
+              },
+              {
+                "name": "D7",
+                "tooltip": "D7 tooltip",
+                "contextMenu": {
+                  "title": "C4 | B2 | A1 | D7",
+                  "content": "",
+                  "subContent": ""
+                }
+              },
+              {
+                "name": "D8",
+                "tooltip": "D8 tooltip",
+                "contextMenu": {
+                  "title": "C4 | B2 | A1 | D8",
+                  "content": "",
+                  "subContent": ""
+                }
+              },
+              {
+                "name": "D9",
+                "tooltip": "D9 tooltip",
+                "contextMenu": {
+                  "title": "C4 | B2 | A1 | D9",
+                  "content": "D8 content",
+                  "subContent": "D8 Subcontent"
+                },
+                "children": [{
+                  "name": "E1",
+                  "tooltip": "E1 tooltip",
+                  "contextMenu": {
+                    "title": "C4 | B2 | A1 | D9 | E1",
+                    "content": "E1 content",
+                    "subContent": "E1 Subcontent"
+                  },
+                }]
+              }
+            ]
           },
           {
             "name": "C5",
